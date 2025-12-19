@@ -1,11 +1,25 @@
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", // Fixed spelling here
+  baseURL: "http://localhost:5000",
 });
 
-const useAxios = () => {
-  return axiosInstance;
-};
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-export default useAxios;
+    if (user) {
+      const token = await user.getIdToken();
+      config.headers.authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default function useAxios() {
+  return axiosInstance;
+}

@@ -101,20 +101,6 @@ const Sidebar = () => {
           <MdGroup className="w-6 h-6" />
           <span className="font-medium">My Profile</span>
         </NavLink>
-
-        <NavLink
-          to="/dashboard/settings"
-          className={({ isActive }) =>
-            `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-              isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
-            }`
-          }
-        >
-          <MdSettings className="w-6 h-6" />
-          <span className="font-medium">Settings</span>
-        </NavLink>
       </nav>
 
       <div className="mt-auto border-t border-gray-800 pt-4">

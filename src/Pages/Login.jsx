@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   return (
-    <div className="hero bg-base-200">
+    <div className="hero bg-base-200 min-h-screen">
       <ToastContainer position="top-right" autoClose={40000} />
       <div className="hero-content flex-col">
         <div className="text-center">
