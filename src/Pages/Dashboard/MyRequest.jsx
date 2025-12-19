@@ -13,8 +13,8 @@ const MyRequest = () => {
     axiosSecure
       .get(`/my-requests?page=${currentPage}&size=${itemPage}`)
       .then((res) => {
-        setMyRequests(res.data.request || []);
-        setTotalRequest(res.data.totalRequest || 0);
+        setMyRequests(res.data.requests || []);
+        setTotalRequest(res.data.total || 0); 
       })
       .catch((err) => {
         console.error(err);
@@ -45,9 +45,7 @@ const MyRequest = () => {
           <tbody>
             {myRequests.length === 0 ? (
               <tr>
-                <td className="text-center py-6">
-                  No requests found
-                </td>
+                <td className="text-center py-6">No requests found</td>
               </tr>
             ) : (
               myRequests.map((item, index) => (
@@ -87,7 +85,7 @@ const MyRequest = () => {
           ))}
 
           <button
-            onClick={() => setCurrentPage(currentPage )}
+            onClick={() => setCurrentPage(currentPage)}
             disabled={currentPage === numberOfPages}
             className="btn btn-sm"
           >

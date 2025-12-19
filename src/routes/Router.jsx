@@ -26,7 +26,11 @@ const router = createBrowserRouter([
 
       {
         path: "funding",
-        element: <PrivateRoute><Donate /></PrivateRoute>
+        element: (
+          <PrivateRoute>
+            <Donate />
+          </PrivateRoute>
+        ),
       },
 
       { path: "success-payment", element: <PaymentSuccess /> },

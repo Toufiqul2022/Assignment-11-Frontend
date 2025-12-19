@@ -14,11 +14,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.config";
 
 const Sidebar = () => {
-  const { role } = useContext(AuthContext);  
-  
-  const handleLogout = () =>{
-    signOut(auth)
-  }
+  const { role } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    signOut(auth);
+  };
 
   return (
     <aside className="w-64 min-h-screen bg-slate-900 text-white flex flex-col p-4">
@@ -118,7 +118,10 @@ const Sidebar = () => {
       </nav>
 
       <div className="mt-auto border-t border-gray-800 pt-4">
-        <button onClick={handleLogout} className="flex w-full items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-colors">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-colors"
+        >
           <MdLogout className="w-6 h-6" />
           <span className="font-medium">Logout</span>
         </button>
