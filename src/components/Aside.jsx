@@ -3,7 +3,6 @@ import { NavLink } from "react-router";
 import {
   MdHome,
   MdGroup,
-  MdSettings,
   MdLogout,
   MdAddBox,
   MdOutlineInventory2,
@@ -20,6 +19,13 @@ const Sidebar = () => {
     signOut(auth);
   };
 
+  const linkClass = ({ isActive }) =>
+    `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
+      isActive
+        ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+        : "text-gray-400 hover:bg-gray-800 hover:text-white"
+    }`;
+
   return (
     <aside className="w-48 lg:w-64 min-h-screen bg-slate-900 text-white flex flex-col p-8">
       <div className="flex items-center gap-2 mb-8 px-2">
@@ -27,77 +33,43 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex flex-col gap-2 flex-1">
-        <NavLink
-          to="/dashboard"
-          end
-          className={({ isActive }) =>
-            `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-              isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
-            }`
-          }
-        >
-          <MdHome className="w-6 h-6" />
-          <span className="font-medium">Dashboard</span>
-        </NavLink>
+        {/* Donor Links */}
+        {role === "donor" && (
+          <>
+            <NavLink to="/dashboard" end className={linkClass}>
+              <MdHome className="w-6 h-6" />
+              <span className="font-medium">Dashboard</span>
+            </NavLink>
 
-        {role == "donor" && (
-          <NavLink
-            to="/dashboard/add-request"
-            className={({ isActive }) =>
-              `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-                isActive
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
-              }`
-            }
-          >
-            <MdAddBox className="w-6 h-6" />
-            <span className="font-medium">Add Request</span>
-          </NavLink>
+            <NavLink to="/dashboard/add-request" className={linkClass}>
+              <MdAddBox className="w-6 h-6" />
+              <span className="font-medium">Add Request</span>
+            </NavLink>
+          </>
         )}
 
-        {role == "admin" && (
-          <NavLink
-            to="/dashboard/all-users"
-            className={({ isActive }) =>
-              `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-                isActive
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
-              }`
-            }
-          >
-            <FaUsers className="w-6 h-6" />
-            <span className="font-medium">All Users</span>
-          </NavLink>
+        {/* Admin Links */}
+        {role === "admin" && (
+          <>
+            <NavLink to="/dashboard/admin" className={linkClass}>
+              <MdHome className="w-6 h-6" />
+              <span className="font-medium">Admin Dashboard</span>
+            </NavLink>
+
+            <NavLink to="/dashboard/all-users" className={linkClass}>
+              <FaUsers className="w-6 h-6" />
+              <span className="font-medium">All Users</span>
+            </NavLink>
+          </>
         )}
 
-        <NavLink
-          to="/dashboard/my-request"
-          className={({ isActive }) =>
-            `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-              isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
-            }`
-          }
-        >
+        {/* Links common to both */}
+        <NavLink to="/dashboard/my-request" className={linkClass}>
           <MdOutlineInventory2 className="text-2xl" />
           <span className="font-medium">My Request</span>
         </NavLink>
 
-        <NavLink
-          to="/dashboard/profile"
-          className={({ isActive }) =>
-            `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-              isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
-            }`
-          }
-        >
+        <NavLink to="/dashboard/profile" className={linkClass}>
           <MdGroup className="w-6 h-6" />
           <span className="font-medium">My Profile</span>
         </NavLink>

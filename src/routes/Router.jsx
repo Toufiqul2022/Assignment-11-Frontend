@@ -15,6 +15,7 @@ import SearchRequest from "../Pages/searchRequest";
 import BloodDonationRequests from "../Pages/BloodDonationRequests";
 import DonationRequestDetails from "../Pages/DonationRequestDetails";
 import Profile from "../Pages/Dashboard/Profile";
+import AdminDashboard from "../Pages/Dashboard/AdminDashboard";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Dashboard /> },
+      {
+        path: "admin",
+        element: <AdminDashboard />,
+      },
       { path: "add-request", element: <AddRequest /> },
       { path: "all-users", element: <AllUsers /> },
       { path: "my-request", element: <ManageProducts /> },
