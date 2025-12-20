@@ -45,6 +45,11 @@ const Sidebar = () => {
               <MdAddBox className="w-6 h-6" />
               <span className="font-medium">Add Request</span>
             </NavLink>
+
+            <NavLink to="/dashboard/my-request" className={linkClass}>
+              <MdOutlineInventory2 className="text-2xl" />
+              <span className="font-medium">My Request</span>
+            </NavLink>
           </>
         )}
 
@@ -60,14 +65,13 @@ const Sidebar = () => {
               <FaUsers className="w-6 h-6" />
               <span className="font-medium">All Users</span>
             </NavLink>
+
+            <NavLink to="/dashboard/all-requests" className={linkClass}>
+              <FaUsers className="w-6 h-6" />
+              <span className="font-medium">All Request</span>
+            </NavLink>
           </>
         )}
-
-        {/* Links common to both */}
-        <NavLink to="/dashboard/my-request" className={linkClass}>
-          <MdOutlineInventory2 className="text-2xl" />
-          <span className="font-medium">My Request</span>
-        </NavLink>
 
         <NavLink to="/dashboard/profile" className={linkClass}>
           <MdGroup className="w-6 h-6" />
