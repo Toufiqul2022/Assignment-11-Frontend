@@ -18,6 +18,8 @@ import Profile from "../Pages/Dashboard/Profile";
 import AdminDashboard from "../Pages/Dashboard/AdminDashboard";
 import AllRequest from "../Pages/Dashboard/AllRequest";
 
+import VolunteerAllRequests from "../Pages/Dashboard/VolunteerAllRequests";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,20 +61,38 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Dashboard /> },
+
+      /* 🔐 ADMIN ROUTE */
       {
         path: "admin",
         element: <AdminDashboard />,
       },
+
+      /* 👤 DONOR ROUTES */
       { path: "add-request", element: <AddRequest /> },
-      { path: "all-users", element: <AllUsers /> },
       { path: "my-request", element: <ManageProducts /> },
+
+      /* 👮 ADMIN ONLY */
+      { path: "all-users", element: <AllUsers /> },
+
+      /* 👤 COMMON */
       {
         path: "profile",
         element: <Profile />,
       },
+
+      /* 🩸 ADMIN ALL REQUEST */
       {
         path: "All-requests",
         element: <AllRequest />,
+      },
+
+      /* 🤝 VOLUNTEER ROUTE (NEW) */
+      {
+        path: "all-blood-donation-request",
+        element: (
+            <VolunteerAllRequests />
+        ),
       },
     ],
   },

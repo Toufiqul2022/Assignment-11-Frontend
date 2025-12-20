@@ -7,7 +7,7 @@ import {
   MdAddBox,
   MdOutlineInventory2,
 } from "react-icons/md";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaHandsHelping } from "react-icons/fa";
 import { AuthContext } from "../Provider/AuthProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.config";
@@ -33,7 +33,7 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex flex-col gap-2 flex-1">
-        {/* Donor Links */}
+        {/* ================= DONOR LINKS ================= */}
         {role === "donor" && (
           <>
             <NavLink to="/dashboard" end className={linkClass}>
@@ -53,7 +53,7 @@ const Sidebar = () => {
           </>
         )}
 
-        {/* Admin Links */}
+        {/* ================= ADMIN LINKS ================= */}
         {role === "admin" && (
           <>
             <NavLink to="/dashboard/admin" className={linkClass}>
@@ -73,6 +73,25 @@ const Sidebar = () => {
           </>
         )}
 
+        {/* ================= VOLUNTEER LINKS ================= */}
+        {role === "volunteer" && (
+          <>
+            <NavLink to="/dashboard/admin" className={linkClass}>
+              <MdHome className="w-6 h-6" />
+              <span className="font-medium">Dashboard</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/all-blood-donation-request"
+              className={linkClass}
+            >
+              <FaHandsHelping className="w-6 h-6" />
+              <span className="font-medium">All Donation Request</span>
+            </NavLink>
+          </>
+        )}
+
+        {/* ================= COMMON ================= */}
         <NavLink to="/dashboard/profile" className={linkClass}>
           <MdGroup className="w-6 h-6" />
           <span className="font-medium">My Profile</span>
