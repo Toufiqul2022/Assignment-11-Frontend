@@ -29,7 +29,7 @@ const Donate = () => {
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title justify-center text-2xl font-bold text-primary">
-            Support Our Cause ❤️
+            Support Our Cause 
           </h2>
 
           <p className="text-center text-gray-500 mb-4">

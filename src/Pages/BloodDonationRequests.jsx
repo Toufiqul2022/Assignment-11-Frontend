@@ -11,7 +11,6 @@ const BloodDonationRequests = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // 🔹 Load all donation requests (PUBLIC)
   useEffect(() => {
     setLoading(true);
     axiosInstance
@@ -21,7 +20,6 @@ const BloodDonationRequests = () => {
       .finally(() => setLoading(false));
   }, [axiosInstance]);
 
-  // 🔹 Navigate to details page
   const handleView = (id) => {
     if (!user) {
       navigate("/login");
