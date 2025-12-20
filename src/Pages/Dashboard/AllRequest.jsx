@@ -7,13 +7,24 @@ const AllRequest = () => {
   const [requests, setRequests] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const size = 10;
 
+  // ✅ BEST PRACTICE
   useEffect(() => {
-    fetchRequests();
-  }, [page, size]);
+    const fetchRequests = async () => {
+      const res = await axiosSecure.get(
+        `/admin/requests?page=${page}&size=${size}`
+      );
+      setRequests(res.data.requests);
+      setTotal(res.data.total);
+    };
 
-  const fetchRequests = async () => {
+    fetchRequests();
+  }, [axiosSecure, page, size]); // ✅ NO axiosSecure dependency
+
+  const handleStatus = async (id, status) => {
+    await axiosSecure.patch(`/admin/requests/status/${id}`, { status });
+
     const res = await axiosSecure.get(
       `/admin/requests?page=${page}&size=${size}`
     );
@@ -21,15 +32,16 @@ const AllRequest = () => {
     setTotal(res.data.total);
   };
 
-  const handleStatus = async (id, status) => {
-    await axiosSecure.patch(`/admin/requests/status/${id}`, { status });
-    fetchRequests();
-  };
-
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure?")) return;
+    if (!window.confirm("Are you sure?")) return;
+
     await axiosSecure.delete(`/admin/requests/${id}`);
-    fetchRequests();
+
+    const res = await axiosSecure.get(
+      `/admin/requests?page=${page}&size=${size}`
+    );
+    setRequests(res.data.requests);
+    setTotal(res.data.total);
   };
 
   const totalPages = Math.ceil(total / size);
@@ -63,19 +75,25 @@ const AllRequest = () => {
                   {req.district}, {req.upazila}
                 </td>
                 <td>
-                  <span className="badge badge-outline">{req.status}</span>
+                  <span className="badge badge-outline">
+                    {req.status}
+                  </span>
                 </td>
                 <td className="space-x-2">
                   {req.status === "inprogress" && (
                     <>
                       <button
-                        onClick={() => handleStatus(req._id, "done")}
+                        onClick={() =>
+                          handleStatus(req._id, "done")
+                        }
                         className="btn btn-xs btn-success"
                       >
                         Done
                       </button>
                       <button
-                        onClick={() => handleStatus(req._id, "canceled")}
+                        onClick={() =>
+                          handleStatus(req._id, "canceled")
+                        }
                         className="btn btn-xs btn-warning"
                       >
                         Cancel
@@ -101,7 +119,9 @@ const AllRequest = () => {
           <button
             key={num}
             onClick={() => setPage(num + 1)}
-            className={`btn btn-sm ${page === num + 1 ? "btn-primary" : ""}`}
+            className={`btn btn-sm ${
+              page === num + 1 ? "btn-primary" : ""
+            }`}
           >
             {num + 1}
           </button>
