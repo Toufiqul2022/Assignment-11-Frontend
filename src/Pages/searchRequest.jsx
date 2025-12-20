@@ -161,7 +161,6 @@ const SearchRequest = () => {
             className="card bg-base-100 shadow-lg border border-base-300"
           >
             <div className="card-body space-y-2">
-              {/* Header */}
               <div className="flex justify-between items-center">
                 <h2 className="card-title text-red-600 text-2xl">
                   {req.bloodGroup} Blood Needed
@@ -176,7 +175,6 @@ const SearchRequest = () => {
                 </span>
               </div>
 
-              {/* Patient Info */}
               <p>
                 <span className="font-semibold">Patient:</span>{" "}
                 {req.recipientName}
@@ -190,13 +188,11 @@ const SearchRequest = () => {
                 <span className="font-semibold">Address:</span> {req.address}
               </p>
 
-              {/* Location */}
               <p>
                 <span className="font-semibold">Location:</span> {req.upazila},{" "}
                 {req.district}
               </p>
 
-              {/* Date & Time */}
               <div className="flex gap-4 flex-wrap">
                 <p>
                   <span className="font-semibold">Date:</span>{" "}
@@ -208,12 +204,10 @@ const SearchRequest = () => {
                 </p>
               </div>
 
-              {/* Message */}
               <div className="bg-base-200 p-3 rounded-lg">
                 <p className="text-sm italic">“{req.message}”</p>
               </div>
 
-              {/* Footer */}
               <div className="flex justify-between items-center pt-2">
                 <div className="text-sm text-gray-500">
                   Requested by{" "}

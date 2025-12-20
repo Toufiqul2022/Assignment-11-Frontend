@@ -172,7 +172,6 @@ const Home = ({ user }) => {
           </div>
         </div>
       </section>
-      {/* Footer */}
       <Footer></Footer>
     </div>
   );

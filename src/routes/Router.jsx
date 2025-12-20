@@ -22,7 +22,7 @@ import AdminDashboard from "../Pages/Dashboard/AdminDashboard";
 import AllRequest from "../Pages/Dashboard/AllRequest";
 import VolunteerAllRequests from "../Pages/Dashboard/VolunteerAllRequests";
 
-/* 🔁 DASHBOARD ROLE REDIRECT (INLINE) */
+
 const DashboardRedirect = () => {
   const { role, loading } = useContext(AuthContext);
 
@@ -77,27 +77,26 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // 🚫 NO DEFAULT DASHBOARD PAGE
-      // 🔁 AUTO REDIRECT BASED ON ROLE
+
       { index: true, element: <DashboardRedirect /> },
 
-      // 👤 DONOR
+      // DONOR
       { path: "donor", element: <Dashboard /> },
       { path: "add-request", element: <AddRequest /> },
       { path: "my-request", element: <ManageProducts /> },
 
-      // 👮 ADMIN
+      // ADMIN
       { path: "admin", element: <AdminDashboard /> },
       { path: "all-users", element: <AllUsers /> },
       { path: "all-requests", element: <AllRequest /> },
 
-      // 🤝 VOLUNTEER
+      // VOLUNTEER
       {
         path: "all-blood-donation-request",
         element: <VolunteerAllRequests />,
       },
 
-      // 👤 COMMON
+      // COMMON
       { path: "profile", element: <Profile /> },
     ],
   },
