@@ -30,7 +30,6 @@ const AllUsers = () => {
   return (
     <div className="min-h-screen bg-base-100 p-6">
       <div className="w-full mx-auto">
-        {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <FaUsers className="text-3xl text-primary" />
           <div>
@@ -39,7 +38,6 @@ const AllUsers = () => {
           </div>
         </div>
 
-        {/* Table */}
         <div className="card bg-base-100 shadow-xl rounded-2xl">
           <div className="card-body p-0">
             <div className="overflow-x-auto">
@@ -60,7 +58,6 @@ const AllUsers = () => {
                     <tr key={u._id} className="hover">
                       <td>{index + 1}</td>
 
-                      {/* User */}
                       <td>
                         <div className="flex items-center gap-3">
                           <div className="avatar">
@@ -83,17 +80,14 @@ const AllUsers = () => {
                         </div>
                       </td>
 
-                      {/* Blood */}
                       <td className="font-medium">{u.blood || "N/A"}</td>
 
-                      {/* Role */}
                       <td>
                         <span className="badge badge-outline capitalize">
                           {u.role || "user"}
                         </span>
                       </td>
 
-                      {/* Status */}
                       <td>
                         <span
                           className={`badge capitalize ${
@@ -105,8 +99,6 @@ const AllUsers = () => {
                           {u.status || "active"}
                         </span>
                       </td>
-
-                      {/* Action */}
                       <td className="text-center space-x-2">
                         {u?.status == "active" ? (
                           <button
