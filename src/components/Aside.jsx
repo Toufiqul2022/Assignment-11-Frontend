@@ -76,7 +76,7 @@ const Sidebar = () => {
         {/* VOLUNTEER LINKS  */}
         {role === "volunteer" && (
           <>
-            <NavLink to="/dashboard/admin" className={linkClass}>
+            <NavLink to="/dashboard/volunteer" className={linkClass}>
               <MdHome className="w-6 h-6" />
               <span className="font-medium">Dashboard</span>
             </NavLink>

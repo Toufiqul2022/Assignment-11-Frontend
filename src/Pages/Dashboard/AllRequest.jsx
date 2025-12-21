@@ -99,12 +99,6 @@ const AllRequest = () => {
                       </button>
                     </>
                   )}
-                  <button
-                    onClick={() => handleDelete(req._id)}
-                    className="btn btn-xs btn-error"
-                  >
-                    Delete
-                  </button>
                 </td>
               </tr>
             ))}

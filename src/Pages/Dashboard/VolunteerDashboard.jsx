@@ -44,7 +44,7 @@ const AdminDashboard = () => {
     <div className="p-8 font-sans bg-gray-50 min-h-screen">
       <section className="mb-10 text-center">
         <h1 className="text-4xl font-bold text-gray-800">
-          Welcome Admin, {user?.displayName || "User"}!
+          Welcome Volunteer, {user?.displayName || "User"}!
         </h1>
         <p className="text-gray-600 mt-2">
           Here's a quick overview of your system.

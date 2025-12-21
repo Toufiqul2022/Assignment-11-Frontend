@@ -21,7 +21,7 @@ import Profile from "../Pages/Dashboard/Profile";
 import AdminDashboard from "../Pages/Dashboard/AdminDashboard";
 import AllRequest from "../Pages/Dashboard/AllRequest";
 import VolunteerAllRequests from "../Pages/Dashboard/VolunteerAllRequests";
-
+import VolunteerDashboard from "../Pages/Dashboard/VolunteerDashboard";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const DashboardRedirect = () => {
@@ -32,7 +32,7 @@ const DashboardRedirect = () => {
   if (role === "admin") return <Navigate to="/dashboard/admin" replace />;
   if (role === "donor") return <Navigate to="/dashboard/donor" replace />;
   if (role === "volunteer")
-    return <Navigate to="/dashboard/admin" replace />;
+    return <Navigate to="/dashboard/volunteer" replace />;
 
   return <Navigate to="/" replace />;
 };
@@ -78,7 +78,6 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-
       { index: true, element: <DashboardRedirect /> },
 
       // DONOR
@@ -92,6 +91,10 @@ const router = createBrowserRouter([
       { path: "all-requests", element: <AllRequest /> },
 
       // VOLUNTEER
+      {
+        path: "volunteer",
+        element: <VolunteerDashboard />,
+      },
       {
         path: "all-blood-donation-request",
         element: <VolunteerAllRequests />,
