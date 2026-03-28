@@ -9,7 +9,6 @@ import { GoogleAuthProvider } from "firebase/auth";
 import axios from "axios";
 
 const provider = new GoogleAuthProvider();
-
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -19,53 +18,57 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState("");
   const [useStatus, setUseStatus] = useState("");
 
-  const registerWithEmailPassword = (email, password) => {
-    console.log(email, password);
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
-
-  console.log(user);
+  const registerWithEmailPassword = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+      if (!currentUser) {
+        setRole("");
+        setUseStatus("");
+        setRoleLoading(false);
+      }
     });
-
     return () => unSub();
   }, []);
 
   useEffect(() => {
     if (!user) return;
+    setRoleLoading(true);
     axios
       .get(
-        `https://assignment-11-backend-xi.vercel.app/users/role/${user.email}`
+        `https://assignment-11-backend-alpha.vercel.app/users/role/${user.email}`,
       )
       .then((res) => {
-        setRole(res.data.role);
-        setUseStatus(res.data.status);
-        setRoleLoading(false);
-      });
+        setRole(res.data.role || "donor");
+        setUseStatus(res.data.status || "active");
+      })
+      .catch(() => {
+        setRole("donor");
+        setUseStatus("active");
+      })
+      .finally(() => setRoleLoading(false));
   }, [user]);
 
-  console.log(role);
-  const handleGoogleSignIn = () => {
-    return signInWithPopup(auth, provider);
-  };
-
-  const authData = {
-    registerWithEmailPassword,
-    user,
-    setUser,
-    handleGoogleSignIn,
-    loading,
-    roleLoading,
-    role,
-    useStatus,
-  };
+  const handleGoogleSignIn = () => signInWithPopup(auth, provider);
 
   return (
-    <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        registerWithEmailPassword,
+        user,
+        setUser,
+        handleGoogleSignIn,
+        loading,
+        roleLoading,
+        role,
+        useStatus,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

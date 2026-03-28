@@ -1,142 +1,99 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import useAxios from "../../hooks/useAxios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
+
+const sc = { pending:"#fef3c7,#92400e,#f59e0b", inprogress:"#dbeafe,#1e40af,#3b82f6", done:"#dcfce7,#166534,#22c55e", canceled:"#fee2e2,#991b1b,#ef4444" };
 
 const DashboardHome = () => {
   const { user } = useContext(AuthContext);
   const axiosInstance = useAxios();
   const navigate = useNavigate();
-  const [requests, setRequests] = useState([]);
+  const qc = useQueryClient();
 
-  useEffect(() => {
-    axiosInstance.get("/my-requests?size=3&page=1").then((res) => {
-      setRequests(res.data.requests);
-    });
-  }, [axiosInstance]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["donor-recent"],
+    queryFn: () => axiosInstance.get("/my-requests?size=3&page=1").then(r => r.data),
+  });
+  const requests = data?.requests || [];
 
-  const handleStatusChange = async (id, status) => {
-    await axiosInstance.patch(`/requests/status/${id}`, { status });
-    setRequests((prev) =>
-      prev.map((req) => (req._id === id ? { ...req, status } : req))
-    );
+  const statusMut = useMutation({
+    mutationFn: ({ id, status }) => axiosInstance.patch(`/requests/status/${id}`, { status }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["donor-recent"] }),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id) => axiosInstance.delete(`/requests/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["donor-recent"] });
+      Swal.fire({ title:"Deleted!", icon:"success", timer:1500, showConfirmButton:false });
+    },
+  });
+
+  const handleDelete = (id) => {
+    Swal.fire({ title:"Delete this request?", icon:"warning", showCancelButton:true, confirmButtonColor:"#d33", confirmButtonText:"Yes, delete!" })
+      .then(r => { if (r.isConfirmed) deleteMut.mutate(id); });
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this request?")) return;
-    await axiosInstance.delete(`/requests/${id}`);
-    setRequests((prev) => prev.filter((req) => req._id !== id));
-  };
-
-  const handleView = (id) => {
-    navigate(user ? `/requests/${id}` : "/login");
-  };
+  if (isLoading) return <div style={{ display:"flex",alignItems:"center",justifyContent:"center",minHeight:"60vh" }}><div style={{ width:36,height:36,border:"3px solid #f3f3f3",borderTop:"3px solid #dc2626",borderRadius:"50%",animation:"spin .8s linear infinite" }}/><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
   return (
-    <div className="p-10 bg-gray-50 min-h-screen">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800">
-        Welcome, {user?.displayName} 👋
-      </h1>
+    <div style={{ minHeight:"100vh",background:"#f8fafc",padding:"2rem",fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');.dt{width:100%;border-collapse:collapse}.dt th{text-align:left;font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;padding:.85rem 1.1rem;background:#dc2626}.dt td{padding:.9rem 1.1rem;font-size:.875rem;color:#374151;border-bottom:1px solid #f8fafc}.dt tr:hover td{background:#fafafa}.ab{padding:.38rem .85rem;border-radius:8px;border:none;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}.ab:hover{transform:translateY(-1px)}`}</style>
+
+      <div style={{ marginBottom:"2rem" }}>
+        <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:4 }}>Donor Dashboard</p>
+        <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"2rem",fontWeight:700,color:"#0f172a",letterSpacing:"-.02em",margin:0 }}>
+          Welcome, {user?.displayName?.split(" ")[0]||"Donor"} 👋
+        </h1>
+        <p style={{ color:"#64748b",marginTop:6,fontSize:".9rem" }}>Here are your 3 most recent donation requests.</p>
+      </div>
 
       {requests.length > 0 ? (
-        <>
-          <h2 className="text-2xl font-semibold mb-6 text-gray-700">
-            My Recent Donation Requests
-          </h2>
-
-          <div className="overflow-x-auto rounded-2xl bg-white shadow-lg">
-            <table className="table w-full text-base">
-              <thead className="bg-red-600 text-white text-lg">
-                <tr>
-                  <th className="py-4 px-6">Recipient</th>
-                  <th className="py-4 px-6">Location</th>
-                  <th className="py-4 px-6">Date</th>
-                  <th className="py-4 px-6">Time</th>
-                  <th className="py-4 px-6">Blood</th>
-                  <th className="py-4 px-6">Status</th>
-                  <th className="py-4 px-6">Donor</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-
+        <div style={{ background:"#fff",borderRadius:20,border:"1px solid rgba(0,0,0,.06)",overflow:"hidden" }}>
+          <div style={{ overflowX:"auto" }}>
+            <table className="dt">
+              <thead><tr><th>Recipient</th><th>Location</th><th>Date</th><th>Blood</th><th>Status</th><th>Donor</th><th>Actions</th></tr></thead>
               <tbody>
-                {requests.map((req) => (
-                  <tr key={req._id} className="hover:bg-gray-100">
-                    <td className="font-medium py-4 px-6 text-lg">
-                      {req.recipientName}
-                    </td>
-                    <td className="py-4 px-6 text-lg">
-                      {req.district}, {req.upazila}
-                    </td>
-                    <td className="py-4 px-6 text-lg">{req.donationDate}</td>
-                    <td className="py-4 px-6 text-lg">{req.donationTime}</td>
-                    <td className="font-semibold py-4 px-6 text-lg">
-                      {req.bloodGroup}
-                    </td>
-                    <td className="capitalize py-4 px-6 text-lg">{req.status}</td>
-                    <td className="py-4 px-6 text-lg">
-                      {req.status === "inprogress"
-                        ? `${req.donorName} (${req.donorEmail})`
-                        : "-"}
-                    </td>
-
-                    <td className="text-right py-4 px-6">
-                      <div className="inline-flex flex-wrap gap-3">
-                        {req.status === "inprogress" && (
-                          <>
-                            <button
-                              className="btn btn-sm btn-success"
-                              onClick={() =>
-                                handleStatusChange(req._id, "done")
-                              }
-                            >
-                              Done
-                            </button>
-                            <button
-                              className="btn btn-sm btn-error"
-                              onClick={() =>
-                                handleStatusChange(req._id, "canceled")
-                              }
-                            >
-                              Cancel
-                            </button>
-                          </>
-                        )}
-
-                        <button
-                          className="btn btn-sm btn-info"
-                          onClick={() =>
-                            navigate(`/dashboard/edit-request/${req._id}`)
-                          }
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          className="btn btn-sm btn-warning"
-                          onClick={() => handleDelete(req._id)}
-                        >
-                          Delete
-                        </button>
-
-                        <button
-                          onClick={() => handleView(req._id)}
-                          className="btn btn-sm btn-outline btn-error"
-                        >
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {requests.map(req => {
+                  const [bg,col,dot] = (sc[req.status]||sc.pending).split(",");
+                  return (
+                    <tr key={req._id}>
+                      <td style={{ fontWeight:500,color:"#0f172a" }}>{req.recipientName}</td>
+                      <td style={{ color:"#64748b" }}>{req.district}, {req.upazila}</td>
+                      <td style={{ color:"#94a3b8",fontSize:".78rem" }}>{req.donationDate}</td>
+                      <td><span style={{ background:"rgba(220,38,38,.08)",color:"#dc2626",padding:"2px 10px",borderRadius:6,fontWeight:700,fontSize:".82rem" }}>{req.bloodGroup}</span></td>
+                      <td><span style={{ display:"inline-flex",alignItems:"center",gap:5,padding:"3px 10px",borderRadius:50,fontSize:".7rem",fontWeight:600,textTransform:"capitalize",background:bg,color:col }}><span style={{ width:5,height:5,borderRadius:"50%",background:dot }}/>{req.status}</span></td>
+                      <td style={{ fontSize:".78rem",color:"#64748b" }}>{req.status==="inprogress"?`${req.donorName}`:"—"}</td>
+                      <td>
+                        <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+                          {req.status==="inprogress" && <>
+                            <button className="ab" style={{ background:"#dcfce7",color:"#166534" }} onClick={()=>statusMut.mutate({id:req._id,status:"done"})}>Done</button>
+                            <button className="ab" style={{ background:"#fee2e2",color:"#991b1b" }} onClick={()=>statusMut.mutate({id:req._id,status:"canceled"})}>Cancel</button>
+                          </>}
+                          <button className="ab" style={{ background:"#fef3c7",color:"#92400e" }} onClick={()=>handleDelete(req._id)}>Delete</button>
+                          <button className="ab" style={{ background:"#dbeafe",color:"#1e40af" }} onClick={()=>navigate(`/requests/${req._id}`)}>View</button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
-        </>
+          <div style={{ padding:"1rem 1.25rem",borderTop:"1px solid #f1f5f9",display:"flex",gap:10 }}>
+            <button onClick={()=>navigate("/dashboard/my-request")} style={{ padding:".45rem 1.1rem",borderRadius:9,border:"1px solid rgba(220,38,38,.3)",background:"transparent",color:"#dc2626",fontSize:".82rem",fontWeight:600,cursor:"pointer",fontFamily:"inherit" }}>View All Requests</button>
+            <button onClick={()=>navigate("/dashboard/add-request")} style={{ padding:".45rem 1.1rem",borderRadius:9,border:"none",background:"#dc2626",color:"#fff",fontSize:".82rem",fontWeight:600,cursor:"pointer",fontFamily:"inherit" }}>+ New Request</button>
+          </div>
+        </div>
       ) : (
-        <p className="text-gray-600 mt-8 text-lg">
-          No recent donation requests found.
-        </p>
+        <div style={{ background:"#fff",borderRadius:20,border:"1px solid rgba(0,0,0,.06)",padding:"4rem",textAlign:"center" }}>
+          <div style={{ fontSize:"3rem",marginBottom:"1rem" }}>🩸</div>
+          <p style={{ color:"#64748b",marginBottom:"1.25rem",fontSize:"1rem" }}>No donation requests yet.</p>
+          <button onClick={()=>navigate("/dashboard/add-request")} style={{ padding:".7rem 1.75rem",borderRadius:50,border:"none",background:"#dc2626",color:"#fff",fontSize:".9rem",fontWeight:700,cursor:"pointer",fontFamily:"inherit",boxShadow:"0 6px 20px rgba(220,38,38,.3)" }}>Create Your First Request</button>
+        </div>
       )}
     </div>
   );

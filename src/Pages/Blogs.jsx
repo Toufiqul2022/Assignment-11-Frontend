@@ -1,92 +1,43 @@
-// src/components/Blogs.jsx
 import React from "react";
 import { Link } from "react-router";
+import card4 from "../assets/card-4.png";
+import card5 from "../assets/card-5.png";
+import card6 from "../assets/card-6.png";
 
-const BlogsSection = () => {
-  const posts = [
-    {
-      id: 1,
-      title: "How to Prepare for Your First Blood Donation",
-      tag: "For Donors",
-      readTime: "6 min read",
-      excerpt:
-        "Nervous about donating for the first time? Learn what to eat, what to avoid, and how to stay relaxed.",
-    },
-    {
-      id: 2,
-      title: "Understanding Blood Groups & Compatibility",
-      tag: "Education",
-      readTime: "8 min read",
-      excerpt:
-        "A quick guide to blood groups, Rh factors, and why compatibility matters so much during emergencies.",
-    },
-    {
-      id: 3,
-      title: "Stories of Hope from Our Community",
-      tag: "Stories",
-      readTime: "5 min read",
-      excerpt:
-        "Real experiences from donors and recipients who connected through our platform.",
-    },
-  ];
+const posts = [
+  { img:card4, tag:"Health", title:"The Science Behind Blood Types", date:"Jan 12, 2025", read:"4 min read", desc:"Understanding ABO and Rh blood group systems — why compatibility matters for safe transfusions." },
+  { img:card5, tag:"Tips", title:"Before Your First Donation", date:"Jan 25, 2025", read:"3 min read", desc:"What to eat, what to avoid, and how to prepare physically and mentally before donating blood." },
+  { img:card6, tag:"Stories", title:"How One Donor Saved Three Lives", date:"Feb 8, 2025", read:"5 min read", desc:"A remarkable true story from Chittagong where a single O− donation helped three trauma patients." },
+];
 
-  return (
-    <section className="py-16 bg-sky-500/15">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-          <div>
-            <p className="text-sm font-semibold tracking-[0.25em] uppercase text-red-500 mb-2">
-              Blog & Resources
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Learn, donate, and inspire others.
-            </h2>
-            <p className="text-slate-600 max-w-2xl">
-              Stay informed with helpful guides, educational resources, and real
-              stories from our BloodUnity community.
-            </p>
-          </div>
-          <div className="md:text-right">
-            <Link
-              to="/blogs"
-              className="btn btn-outline border-red-500 text-red-600 hover:bg-red-500 hover:text-white"
-            >
-              View All Blogs
-            </Link>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {posts.map((post) => (
-            <article
-              key={post.id}
-              className="rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all p-6 flex flex-col border border-slate-100"
-            >
-              <div className="flex items-center justify-between text-xs mb-3">
-                <span className="inline-flex px-3 py-1 rounded-full bg-rose-100 text-rose-700 font-semibold">
-                  {post.tag}
-                </span>
-                <span className="text-slate-500">{post.readTime}</span>
-              </div>
-              <h3 className="text-lg font-semibold mb-2 hover:text-red-600 transition-colors">
-                {post.title}
-              </h3>
-              <p className="text-sm text-slate-600 flex-1 mb-4">
-                {post.excerpt}
-              </p>
-              <Link
-                to={`/blogs/${post.id}`}
-                className="text-sm font-semibold text-red-600 hover:text-red-700 inline-flex items-center gap-1 mt-auto"
-              >
-                Read more
-                <span aria-hidden="true">↗</span>
-              </Link>
-            </article>
-          ))}
-        </div>
+const Blogs = () => (
+  <div style={{ minHeight:"100vh",background:"#f8fafc",padding:"5rem 1.5rem",fontFamily:"'DM Sans',sans-serif" }}>
+    <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap');.bc{background:#fff;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:all .35s}.bc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(220,38,38,.1);border-color:rgba(220,38,38,.18)}.bc:hover .bi{transform:scale(1.05)}.bi{width:100%;height:200px;object-fit:cover;transition:transform .6s;display:block}`}</style>
+    <div style={{ maxWidth:1100,margin:"0 auto" }}>
+      <div style={{ textAlign:"center",marginBottom:"3.5rem" }}>
+        <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8 }}>Latest articles</p>
+        <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:900,color:"#0f172a",letterSpacing:"-.02em",margin:0 }}>Blog &amp; Resources</h1>
       </div>
-    </section>
-  );
-};
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"1.5rem" }}>
+        {posts.map(p => (
+          <div key={p.title} className="bc">
+            <img src={p.img} alt={p.title} className="bi" loading="lazy"/>
+            <div style={{ padding:"1.5rem" }}>
+              <div style={{ display:"flex",gap:10,alignItems:"center",marginBottom:"0.75rem" }}>
+                <span style={{ background:"rgba(220,38,38,.09)",color:"#dc2626",padding:"2px 10px",borderRadius:50,fontSize:".7rem",fontWeight:700 }}>{p.tag}</span>
+                <span style={{ fontSize:".72rem",color:"#94a3b8" }}>{p.date} · {p.read}</span>
+              </div>
+              <div style={{ fontSize:"1.05rem",fontWeight:700,color:"#0f172a",marginBottom:8,lineHeight:1.35 }}>{p.title}</div>
+              <div style={{ fontSize:".875rem",color:"#64748b",lineHeight:1.65 }}>{p.desc}</div>
+              <div style={{ marginTop:"1.25rem" }}>
+                <Link to="/" style={{ color:"#dc2626",fontWeight:600,fontSize:".85rem",textDecoration:"none" }}>Read more →</Link>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 
-export default BlogsSection;
+export default Blogs;

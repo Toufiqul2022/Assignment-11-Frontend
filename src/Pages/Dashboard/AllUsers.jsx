@@ -1,211 +1,101 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { FaUsers, FaUserPlus, FaBan, FaCheckCircle } from "react-icons/fa";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
-  const [users, setUsers] = useState([]);
+  const qc = useQueryClient();
 
-  const fetchUsers = () => {
-    axiosSecure.get("/users").then((res) => {
-      setUsers(res.data);
-    });
+  const { data: users = [], isLoading, isError } = useQuery({
+    queryKey: ["all-users"],
+    queryFn: () => axiosSecure.get("/users").then(r => r.data),
+  });
+
+  const statusMut = useMutation({
+    mutationFn: ({ email, newStatus }) => axiosSecure.patch(`/update/user/status?email=${email}&status=${newStatus}`),
+    onSuccess: (_, { newStatus }) => {
+      qc.invalidateQueries({ queryKey: ["all-users"] });
+      Swal.fire({ title:"Updated!", text:`Status set to ${newStatus}.`, icon:"success", timer:1500, showConfirmButton:false });
+    },
+  });
+
+  const roleMut = useMutation({
+    mutationFn: (id) => axiosSecure.patch(`/users/make-volunteer/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["all-users"] });
+      Swal.fire({ title:"Promoted!", text:"User is now a Volunteer.", icon:"success", timer:1500, showConfirmButton:false });
+    },
+  });
+
+  const handleStatus = (email, current) => {
+    const next = current === "active" ? "blocked" : "active";
+    Swal.fire({ title:"Are you sure?", text:`This will ${next} the user.`, icon:"warning", showCancelButton:true, confirmButtonColor:"#3085d6", cancelButtonColor:"#d33", confirmButtonText:`Yes, ${next}!` })
+      .then(r => { if (r.isConfirmed) statusMut.mutate({ email, newStatus: next }); });
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, [axiosSecure]);
-
-  const handleStatusChange = (email, currentStatus) => {
-    const newStatus = currentStatus === "active" ? "blocked" : "active";
-
-    Swal.fire({
-      title: "Are you sure?",
-      text: `You are about to ${newStatus} this user!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: `Yes, ${newStatus} it!`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .patch(`/update/user/status?email=${email}&status=${newStatus}`)
-          .then((res) => {
-            if (res.data.modifiedCount > 0) {
-              Swal.fire({
-                title: "Success!",
-                text: `User status updated to ${newStatus}.`,
-                icon: "success",
-                timer: 1500,
-                showConfirmButton: false,
-              });
-              fetchUsers();
-            }
-          });
-      }
-    });
+  const handleVolunteer = (u) => {
+    Swal.fire({ title:"Promote to Volunteer?", text:`${u.name} will become a volunteer.`, icon:"info", showCancelButton:true, confirmButtonColor:"#3085d6", cancelButtonColor:"#d33", confirmButtonText:"Yes, Promote!" })
+      .then(r => { if (r.isConfirmed) roleMut.mutate(u._id); });
   };
 
-  const handleMakeVolunteer = (user) => {
-    Swal.fire({
-      title: "Promote to Volunteer?",
-      text: `${user.name} will become a volunteer.`,
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Promote!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.patch(`/users/make-volunteer/${user._id}`).then((res) => {
-          if (res.data.modifiedCount > 0) {
-            Swal.fire({
-              title: "Promoted!",
-              text: `${user.name} is now a Volunteer.`,
-              icon: "success",
-              timer: 1500,
-              showConfirmButton: false,
-            });
-            fetchUsers();
-          }
-        });
-      }
-    });
-  };
+  if (isLoading) return <div style={{ display:"flex",alignItems:"center",justifyContent:"center",minHeight:"60vh" }}><div style={{ width:36,height:36,border:"3px solid #f3f3f3",borderTop:"3px solid #dc2626",borderRadius:"50%",animation:"spin .8s linear infinite" }}/><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (isError) return <div style={{ padding:"2rem",color:"#dc2626",textAlign:"center" }}>Failed to load users.</div>;
+
+  const roleBg = { admin:"rgba(220,38,38,.12)", donor:"rgba(37,99,235,.1)", volunteer:"rgba(22,163,74,.1)" };
+  const roleCol = { admin:"#dc2626", donor:"#1d4ed8", volunteer:"#15803d" };
 
   return (
-    <div className="min-h-screen bg-base-100 p-6">
-      <div className="w-full mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <FaUsers className="text-3xl text-primary" />
-          <div>
-            <h2 className="text-3xl font-bold">All Users</h2>
-            <p className="text-gray-500">Manage all registered users</p>
-          </div>
+    <div style={{ minHeight:"100vh",background:"#f8fafc",padding:"2rem",fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');.dt{width:100%;border-collapse:collapse}.dt th{text-align:left;font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;padding:.75rem 1rem;border-bottom:1px solid #f1f5f9}.dt td{padding:.9rem 1rem;font-size:.875rem;color:#374151;border-bottom:1px solid #f8fafc}.dt tr:hover td{background:#fafafa}.ab{padding:.38rem .85rem;border-radius:8px;border:none;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}.ab:hover{transform:translateY(-1px)}`}</style>
+
+      <div style={{ marginBottom:"1.75rem",display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:"1rem" }}>
+        <div>
+          <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:4 }}>Admin</p>
+          <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"1.9rem",fontWeight:700,color:"#0f172a",margin:0 }}>All Users</h1>
         </div>
+        <span style={{ background:"rgba(220,38,38,.08)",color:"#dc2626",border:"1px solid rgba(220,38,38,.2)",padding:".35rem .9rem",borderRadius:50,fontSize:".82rem",fontWeight:700 }}>{users.length} registered</span>
+      </div>
 
-        <div className="card bg-base-100 shadow-xl rounded-2xl border border-gray-200">
-          <div className="card-body p-0">
-            <div className="overflow-x-auto">
-              <table className="table table-zebra w-full">
-
-                <thead className="bg-base-200 text-base-content">
-                  <tr className="text-sm uppercase">
-                    <th>#</th>
-                    <th>User</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th className="text-center">Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {users.map((u, index) => (
-                    <tr key={u._id} className="hover">
-                      <td>{index + 1}</td>
-
+      <div style={{ background:"#fff",borderRadius:20,border:"1px solid rgba(0,0,0,.06)",overflow:"hidden" }}>
+        <div style={{ overflowX:"auto" }}>
+          <table className="dt">
+            <thead><tr><th>#</th><th>User</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              {users.length === 0
+                ? <tr><td colSpan={5} style={{ textAlign:"center",padding:"3rem",color:"#94a3b8",fontStyle:"italic" }}>No users found</td></tr>
+                : users.map((u, i) => (
+                    <tr key={u._id}>
+                      <td style={{ color:"#94a3b8",fontSize:".78rem" }}>{i+1}</td>
                       <td>
-                        <div className="flex items-center gap-3">
-                          <div className="avatar">
-                            <div className="mask mask-squircle h-12 w-12">
-                              <img
-                                src={
-                                  u.photoURL ||
-                                  "https://i.ibb.co/2kRkz9n/user.png"
-                                }
-                                alt="user"
-                              />
-                            </div>
-                          </div>
+                        <div style={{ display:"flex",alignItems:"center",gap:10 }}>
+                          <img src={u.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||"U")}&background=7f1d1d&color=fff`} alt="" style={{ width:38,height:38,borderRadius:"50%",objectFit:"cover",border:"2px solid #f1f5f9",flexShrink:0 }}/>
                           <div>
-                            <p className="font-bold">
-                              {u.name || u.displayName}
-                            </p>
-                            <p className="text-xs text-gray-500">{u.email}</p>
+                            <div style={{ fontWeight:600,color:"#0f172a",fontSize:".875rem" }}>{u.name||u.displayName}</div>
+                            <div style={{ fontSize:".75rem",color:"#94a3b8" }}>{u.email}</div>
                           </div>
                         </div>
                       </td>
-
-                      {/* Role Badge */}
                       <td>
-                        <span
-                          className={`badge font-medium ${
-                            u.role === "admin"
-                              ? "badge-primary text-white"
-                              : u.role === "volunteer"
-                              ? "badge-secondary text-white"
-                              : "badge-ghost"
-                          }`}
-                        >
-                          {u.role || "donor"}
-                        </span>
+                        <span style={{ background:roleBg[u.role]||roleBg.donor,color:roleCol[u.role]||roleCol.donor,padding:"3px 10px",borderRadius:50,fontSize:".72rem",fontWeight:700,textTransform:"capitalize" }}>{u.role||"donor"}</span>
                       </td>
-
                       <td>
-                        <span
-                          className={`badge font-medium ${
-                            u.status === "blocked"
-                              ? "badge-error text-white"
-                              : "badge-success text-white"
-                          }`}
-                        >
-                          {u.status || "active"}
-                        </span>
+                        <span style={{ background:u.status==="blocked"?"#fee2e2":"#dcfce7",color:u.status==="blocked"?"#991b1b":"#166534",padding:"3px 10px",borderRadius:50,fontSize:".72rem",fontWeight:700,textTransform:"capitalize" }}>{u.status||"active"}</span>
                       </td>
-
-                      {/* Action Buttons */}
-                      <td className="text-center">
-                        <div className="flex gap-2 justify-center flex-wrap">
-                          {/* Block / Unblock Button */}
-                          {u.status === "active" ? (
-                            <button
-                              onClick={() =>
-                                handleStatusChange(u.email, u.status)
-                              }
-                              className="btn btn-ms btn-error text-white tooltip tooltip-top"
-                              data-tip="Block User"
-                            >
-                              <FaBan /> Block
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                handleStatusChange(u.email, u.status)
-                              }
-                              className="btn btn-ms btn-success text-white tooltip tooltip-top"
-                              data-tip="Unblock User"
-                            >
-                              <FaCheckCircle /> Unblock
-                            </button>
+                      <td>
+                        <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+                          <button className="ab" style={{ background:u.status==="active"?"#fee2e2":"#dcfce7",color:u.status==="active"?"#991b1b":"#166534" }} onClick={()=>handleStatus(u.email,u.status)}>
+                            {u.status==="active"?"Block":"Unblock"}
+                          </button>
+                          {u.role==="donor" && (
+                            <button className="ab" style={{ background:"#dbeafe",color:"#1e40af" }} onClick={()=>handleVolunteer(u)}>Make Volunteer</button>
                           )}
-
-                          {/* Make Volunteer Button */}
-                          {u.role === "donor" && (
-                            <button
-                              onClick={() => handleMakeVolunteer(u)}
-                              className="btn btn-ms btn-info text-white tooltip tooltip-top"
-                              data-tip="Make Volunteer"
-                            >
-                              <FaUserPlus /> Vol
-                            </button>
-                          )}
-
                         </div>
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-
-            {users.length === 0 && (
-              <div className="text-center py-10">
-                <p className="text-gray-500 text-lg">No users found.</p>
-              </div>
-            )}
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

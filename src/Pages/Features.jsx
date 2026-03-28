@@ -2,108 +2,54 @@ import React from "react";
 import Card1 from "../assets/Card_1.jpg";
 import Card2 from "../assets/Card_2.jpg";
 import Card3 from "../assets/Card_3.png";
-import Card4 from "../assets/card-4.png";
-import Card5 from "../assets/card-5.png";
-import Card6 from "../assets/card-6.png";
+import { Link } from "react-router";
 
 const FeaturesSection = () => {
   const features = [
-    {
-      img: Card1,
-      title: "Smart Matching",
-      desc: "We intelligently match patients with the nearest compatible donor to reduce waiting time.",
-      tag: "Real-time",
-    },
-    {
-      img: Card2,
-      title: "Verified Donors",
-      desc: "All donors are verified with medical and identity checks to ensure a safe donation.",
-      tag: "Trusted",
-    },
-    {
-      img: Card3,
-      title: "Live Campaigns",
-      desc: "Track active blood donation campaigns and drives across Bangladesh in one place.",
-      tag: "Community",
-    },
-    {
-      img: Card4, // Reusing card image for demo
-      title: "Instant Alerts",
-      desc: "Get notified immediately via SMS or app notifications when a matching blood request is posted near you.",
-      tag: "Speed",
-    },
-    {
-      img: Card5, // Reusing card image for demo
-      title: "Privacy First",
-      desc: "Your personal contact details are kept secure and only shared with verified requestors when you accept.",
-      tag: "Security",
-    },
-    {
-      img: Card6, // Reusing card image for demo
-      title: "Donor Rewards",
-      desc: "Earn digital badges and certificates for your contributions, celebrating your journey as a life-saver.",
-      tag: "Rewards",
-    },
+    { img:Card1, tag:"Community", title:"Support Campaigns", desc:"Join donation drives and special initiatives that directly save lives across Bangladesh." },
+    { img:Card2, tag:"Education", title:"Blood Donation Facts", desc:"Learn about blood types, eligibility criteria, and how a single donation can help up to 3 patients." },
+    { img:Card3, tag:"Impact", title:"Real Success Stories", desc:"Stories from donors and recipients showing the life-saving impact of blood donation." },
+    { tag:"Emergency", title:"Emergency Alerts", desc:"Get real-time alerts for emergency blood requests near your location. Respond in minutes.", emoji:"🚨" },
+    { tag:"Search", title:"Smart Donor Search", desc:"Find compatible donors by blood type, district, and upazila with instant results.", emoji:"🔍" },
+    { tag:"Security", title:"Verified Donors", desc:"All donors are verified through our secure registration process for maximum safety.", emoji:"✅" },
   ];
 
   return (
-    <section className="py-24 bg-sky-500/15">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-teal-600 text-xs font-bold tracking-widest uppercase mb-4">
-            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-            Platform Features
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
-            Everything You Need to{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-600">
-              Save Lives
-            </span>
-          </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            BloodUnity connects donors and patients with a smooth, modern
-            experience—designed for speed, safety, and trust.
-          </p>
+    <div style={{ minHeight:"100vh",background:"#f8fafc",padding:"5rem 1.5rem",fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap');.fc{background:#fff;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:all .35s}.fc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(220,38,38,.1);border-color:rgba(220,38,38,.18)}.fc:hover .fi{transform:scale(1.05)}.fi{width:100%;height:190px;object-fit:cover;transition:transform .6s;display:block}.ep{background:#fff;border-radius:18px;border:1px solid rgba(0,0,0,.06);padding:2rem;transition:all .35s;position:relative;overflow:hidden}.ep::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#dc2626;transform:scaleX(0);transform-origin:left;transition:transform .4s}.ep:hover::before{transform:scaleX(1)}.ep:hover{box-shadow:0 20px 60px rgba(220,38,38,.08);transform:translateY(-4px)}`}</style>
+
+      <div style={{ maxWidth:1200,margin:"0 auto" }}>
+        <div style={{ textAlign:"center",marginBottom:"3.5rem" }}>
+          <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8 }}>Platform features</p>
+          <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:900,color:"#0f172a",letterSpacing:"-.02em",margin:"0 0 1rem" }}>Everything You Need</h1>
+          <p style={{ color:"#64748b",fontSize:"1rem",maxWidth:480,margin:"0 auto" }}>BloodUnity provides all the tools needed to connect donors with patients quickly and safely.</p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((f, i) => (
-            <div
-              key={i}
-              className="group relative bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-teal-900/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col"
-            >
-              {/* Image Container */}
-              <div className="relative h-56 w-full overflow-hidden bg-gray-50">
-                <img
-                  src={f.img}
-                  alt={f.title}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                {/* Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-teal-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"1.25rem" }}>
+          {features.map(f => f.img ? (
+            <div key={f.title} className="fc">
+              <img src={f.img} alt={f.title} className="fi" loading="lazy"/>
+              <div style={{ padding:"1.4rem" }}>
+                <div style={{ fontSize:".72rem",fontWeight:700,color:"#dc2626",textTransform:"uppercase",letterSpacing:".1em",marginBottom:6 }}>{f.tag}</div>
+                <div style={{ fontSize:"1.05rem",fontWeight:700,color:"#0f172a",marginBottom:8 }}>{f.title}</div>
+                <div style={{ fontSize:".875rem",color:"#64748b",lineHeight:1.65 }}>{f.desc}</div>
               </div>
-
-              {/* Content */}
-              <div className="p-8 flex flex-col flex-1">
-                <span className="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-100 mb-4 self-start">
-                  {f.tag}
-                </span>
-
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors">
-                  {f.title}
-                </h3>
-
-                <p className="text-gray-500 leading-relaxed mb-4 flex-1">
-                  {f.desc}
-                </p>
-              </div>
+            </div>
+          ) : (
+            <div key={f.title} className="ep">
+              <div style={{ fontSize:"2rem",marginBottom:".75rem" }}>{f.emoji}</div>
+              <div style={{ fontSize:".72rem",fontWeight:700,color:"#dc2626",textTransform:"uppercase",letterSpacing:".1em",marginBottom:6 }}>{f.tag}</div>
+              <div style={{ fontSize:"1.05rem",fontWeight:700,color:"#0f172a",marginBottom:8 }}>{f.title}</div>
+              <div style={{ fontSize:".875rem",color:"#64748b",lineHeight:1.65 }}>{f.desc}</div>
             </div>
           ))}
         </div>
+
+        <div style={{ textAlign:"center",marginTop:"3rem" }}>
+          <Link to="/register" style={{ display:"inline-block",padding:".85rem 2.5rem",borderRadius:50,background:"#dc2626",color:"#fff",fontWeight:700,fontSize:"1rem",textDecoration:"none",boxShadow:"0 8px 30px rgba(220,38,38,.35)" }}>Get Started Free</Link>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

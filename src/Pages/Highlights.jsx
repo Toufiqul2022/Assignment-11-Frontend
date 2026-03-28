@@ -1,185 +1,42 @@
-// src/components/Highlights.jsx
 import React from "react";
+import { Link } from "react-router";
 
 const HighlightsSection = () => {
   const highlights = [
-    {
-      title: "24/7 Request Support",
-      desc: "Create urgent blood requests anytime and reach donors even during late-night emergencies.",
-      badge: "Always On",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "Location-Based Matching",
-      desc: "We prioritize donors who are closest to the hospital or patient’s area to reduce time and travel.",
-      badge: "Smart Match",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "Transparent Status Tracking",
-      desc: "Track every request from “Created” to “Completed” so families always know what’s happening.",
-      badge: "Clear Updates",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "Community-Driven Impact",
-      desc: "Volunteers, donors, and hospitals work together to build a trusted life-saving network.",
-      badge: "Community",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
-          />
-        </svg>
-      ),
-    },
+    { emoji:"🏆", title:"Most Active District", value:"Dhaka", desc:"Over 3,200 successful donations" },
+    { emoji:"⚡", title:"Fastest Response", value:"4 min", desc:"Average time from request to donor response" },
+    { emoji:"🌟", title:"Top Donor", value:"100+", desc:"Donations by our most active member" },
+    { emoji:"📈", title:"Growth This Year", value:"+240%", desc:"Increase in registered donors" },
+    { emoji:"🤝", title:"Hospital Partners", value:"150+", desc:"Hospitals and clinics in our network" },
+    { emoji:"💉", title:"Rarest Blood", value:"AB−", desc:"Donors ready to respond immediately" },
   ];
-
   return (
-    <section className="py-20 bg-sky-500/15">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="md:flex items-end justify-between gap-10 mb-12">
-          {/* Header Text */}
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="h-0.5 w-8 bg-teal-500"></span>
-              <p className="text-sm font-bold tracking-widest uppercase text-teal-600">
-                Key Highlights
-              </p>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-              Designed for{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-600">
-                Real Emergencies
-              </span>
-            </h2>
-            <p className="text-gray-500 text-lg leading-relaxed">
-              BloodUnity is built with real-world situations in mind—traffic,
-              busy cities, late-night emergencies, and urgent hospital calls.
-            </p>
-          </div>
+    <div style={{ minHeight:"100vh",background:"#0a0e14",padding:"5rem 1.5rem",fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap');.hc{border:1px solid rgba(220,38,38,.2);border-radius:18px;padding:2rem;background:rgba(220,38,38,.04);transition:all .3s}.hc:hover{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.4);transform:translateY(-4px)}`}</style>
 
-          {/* Stat Card */}
-          <div className="hidden md:block">
-            <div className="stats shadow-xl border border-teal-100 bg-white">
-              <div className="stat px-8 py-6">
-                <div className="stat-figure text-teal-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="inline-block w-8 h-8 stroke-current"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    ></path>
-                  </svg>
-                </div>
-                <div className="stat-title font-semibold text-gray-500">
-                  Requests Resolved
-                </div>
-                <div className="stat-value text-teal-600 text-4xl">92%</div>
-                <div className="stat-desc text-emerald-500 font-medium">
-                  Within 24 hours
-                </div>
-              </div>
-            </div>
-          </div>
+      <div style={{ maxWidth:1100,margin:"0 auto" }}>
+        <div style={{ textAlign:"center",marginBottom:"3.5rem" }}>
+          <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8 }}>Milestones</p>
+          <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:900,color:"#fff",letterSpacing:"-.02em",margin:"0 0 1rem" }}>Our Highlights</h1>
+          <p style={{ color:"rgba(255,255,255,.5)",fontSize:"1rem" }}>The numbers that define our impact across Bangladesh.</p>
         </div>
 
-        {/* Grid Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {highlights.map((h, i) => (
-            <div
-              key={i}
-              className="group relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1 transition-all duration-300"
-            >
-              {/* Icon */}
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 mb-4 group-hover:bg-teal-600 group-hover:text-white transition-colors duration-300">
-                {h.icon}
-              </div>
-
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-bold text-gray-800 group-hover:text-teal-700 transition-colors">
-                  {h.title}
-                </h3>
-              </div>
-
-              <p className="text-gray-500 text-sm leading-relaxed mb-4">
-                {h.desc}
-              </p>
-
-              {/* Badge */}
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-700 border border-teal-100">
-                {h.badge}
-              </span>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:"1.25rem" }}>
+          {highlights.map(h => (
+            <div key={h.title} className="hc">
+              <div style={{ fontSize:"2rem",marginBottom:".75rem" }}>{h.emoji}</div>
+              <div style={{ fontFamily:"'Playfair Display',serif",fontSize:"2.2rem",fontWeight:900,color:"#dc2626",lineHeight:1,marginBottom:6 }}>{h.value}</div>
+              <div style={{ fontSize:".95rem",fontWeight:700,color:"#fff",marginBottom:6 }}>{h.title}</div>
+              <div style={{ fontSize:".82rem",color:"rgba(255,255,255,.45)",lineHeight:1.6 }}>{h.desc}</div>
             </div>
           ))}
         </div>
+
+        <div style={{ textAlign:"center",marginTop:"3rem" }}>
+          <Link to="/register" style={{ display:"inline-block",padding:".85rem 2.5rem",borderRadius:50,background:"#dc2626",color:"#fff",fontWeight:700,fontSize:"1rem",textDecoration:"none",boxShadow:"0 8px 30px rgba(220,38,38,.35)" }}>Join Our Community</Link>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

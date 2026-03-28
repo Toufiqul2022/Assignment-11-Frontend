@@ -4,10 +4,9 @@ import Aside from "../components/Aside";
 
 const DashboardLayout = () => {
   return (
-    <div className="flex min-h-screen bg-base-100">
+    <div style={{ display:"flex", minHeight:"100vh", background:"#f8fafc" }}>
       <Aside />
-
-      <main className="flex-1 overflow-y-auto">
+      <main style={{ flex:1, overflowY:"auto", minWidth:0 }}>
         <Outlet />
       </main>
     </div>

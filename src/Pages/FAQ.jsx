@@ -1,85 +1,44 @@
-// src/components/FAQ.jsx
-import React from "react";
+import React, { useState } from "react";
+
+const faqs = [
+  { q:"Who can donate blood?", a:"Most healthy adults aged 18-65 who weigh at least 50kg can donate. You must not have donated in the last 3 months and must be free from certain medical conditions." },
+  { q:"How often can I donate blood?", a:"Whole blood can be donated every 3 months (90 days). Platelets can be donated every 2 weeks, and plasma every 28 days." },
+  { q:"Does donating blood hurt?", a:"You may feel a brief pinch when the needle is inserted, but the donation itself is generally painless. The entire process takes about 45–60 minutes." },
+  { q:"How do I register as a donor on BloodUnity?", a:"Click 'Join Now', fill in your details including blood type and location, and your account will be activated within 24 hours." },
+  { q:"What happens after I respond to a request?", a:"The requester receives your contact information and you'll be in direct contact to coordinate the donation at a hospital or blood bank." },
+  { q:"Is my personal information safe?", a:"Yes. We only share your name and contact details with the requester when you accept a donation request. Your data is never sold or shared with third parties." },
+  { q:"Can I donate if I have taken medication?", a:"It depends on the medication. Common medications like paracetamol don't affect eligibility. Please consult your doctor or contact us for specific cases." },
+  { q:"What are the benefits of donating blood?", a:"Besides saving lives, regular donors get free health screenings. Donation also reduces iron levels, which can lower the risk of cardiovascular disease." },
+];
 
 const FAQSection = () => {
-  const faqs = [
-    {
-      q: "Who can register as a blood donor?",
-      a: "Generally, donors must be healthy, 18–65 years old, and meet local medical eligibility criteria. Always follow your doctor’s recommendations.",
-    },
-    {
-      q: "Is donating blood safe?",
-      a: "Yes. All equipment is sterile and single-use. We never reuse needles, and we strongly encourage donations only from verified, safe centers.",
-    },
-    {
-      q: "Do you charge any fees for connecting donors and patients?",
-      a: "No. Our platform is designed to help people in need. We do not charge users for finding donors or creating requests.",
-    },
-    {
-      q: "How quickly can I find a donor for an urgent request?",
-      a: "It depends on the blood group, location, and available donors. Many urgent requests get matched within minutes through our active community.",
-    },
-    {
-      q: "How often can I donate blood?",
-      a: "For whole blood donation, you usually need to wait 56 days (8 weeks) between donations to allow your body to replenish red blood cells.",
-    },
-    {
-      q: "What should I eat before donating?",
-      a: "Drink plenty of water and eat a healthy, iron-rich meal (like spinach, meat, or beans) before donating. Avoid fatty foods and alcohol 24 hours prior.",
-    },
-    {
-      q: "Does donating blood hurt?",
-      a: "You may feel a slight pinch when the needle is inserted, but the actual donation process is painless and usually takes only 10-15 minutes.",
-    },
-    {
-      q: "Can I donate if I have a tattoo or piercing?",
-      a: "It depends on your local health regulations. In many places, you must wait 3 to 12 months after getting a tattoo or piercing to ensure safety.",
-    },
-  ];
-
+  const [open, setOpen] = useState(null);
   return (
-    <section className="py-20 bg-sky-500/15">
-      <div className="max-w-5xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <p className="text-sm font-bold tracking-widest uppercase text-red-500 mb-3">
-            Common Inquiries
-          </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Your questions answered. Learn more about the donation process,
-            eligibility, and how you can make a difference.
-          </p>
+    <div style={{ minHeight:"100vh",background:"#f8fafc",padding:"5rem 1.5rem",fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap');`}</style>
+      <div style={{ maxWidth:720,margin:"0 auto" }}>
+        <div style={{ textAlign:"center",marginBottom:"3.5rem" }}>
+          <p style={{ fontSize:".78rem",color:"#dc2626",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8 }}>Help center</p>
+          <h1 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:900,color:"#0f172a",letterSpacing:"-.02em",margin:0 }}>Frequently Asked Questions</h1>
         </div>
 
-        {/* FAQ Grid - Stacked */}
-        <div className="space-y-3">
-          {faqs.map((item, index) => (
-            <div
-              key={index}
-              className="collapse collapse-plus bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-            >
-              {/* Logic: Radio inputs allow only one item to be open at a time */}
-              <input
-                type="radio"
-                name="faq-accordion"
-                defaultChecked={index === 0}
-              />
-
-              <div className="collapse-title text-lg font-semibold text-gray-800 py-4 pr-12">
-                {item.q}
+        <div style={{ display:"flex",flexDirection:"column",gap:10 }}>
+          {faqs.map((faq,i) => (
+            <div key={i} onClick={()=>setOpen(open===i?null:i)} style={{ background:"#fff",borderRadius:14,border:`1px solid ${open===i?"rgba(220,38,38,.25)":"rgba(0,0,0,.06)"}`,overflow:"hidden",cursor:"pointer",transition:"border-color .2s" }}>
+              <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",padding:"1.1rem 1.4rem",background:open===i?"rgba(220,38,38,.02)":"transparent" }}>
+                <span style={{ fontWeight:600,color:"#0f172a",fontSize:".95rem",flex:1,paddingRight:"1rem" }}>{faq.q}</span>
+                <span style={{ width:24,height:24,borderRadius:"50%",background:open===i?"#dc2626":"rgba(220,38,38,.1)",color:open===i?"#fff":"#dc2626",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem",flexShrink:0,transition:"all .2s" }}>
+                  {open===i?"−":"+"}
+                </span>
               </div>
-
-              <div className="collapse-content text-gray-600 leading-relaxed text-sm md:text-base border-t border-gray-100 mt-2 pt-4">
-                <p>{item.a}</p>
-              </div>
+              {open===i && (
+                <div style={{ padding:"0 1.4rem 1.1rem",color:"#64748b",fontSize:".9rem",lineHeight:1.7 }}>{faq.a}</div>
+              )}
             </div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
