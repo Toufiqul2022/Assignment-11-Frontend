@@ -85,7 +85,7 @@ const Register = () => {
         email,
         photoURL: imgURL,
         blood,
-        district,
+        district, // ✅ now stores "Mymensingh" not "10"
         upazila,
         createdAt: new Date(),
       });
@@ -232,6 +232,7 @@ const Register = () => {
                 </select>
               </div>
 
+              {/* ✅ FIXED: value={d.name} instead of value={String(d.id)} */}
               <div>
                 <label className="fl">District</label>
                 <select
@@ -245,13 +246,14 @@ const Register = () => {
                 >
                   <option value="">Select district</option>
                   {districts.map((d) => (
-                    <option key={d.id} value={String(d.id)}>
+                    <option key={d.id} value={d.name}>
                       {d.name}
                     </option>
                   ))}
                 </select>
               </div>
 
+              {/* ✅ FIXED: filter by district name match instead of ID */}
               <div>
                 <label className="fl">Upazila</label>
                 <select
@@ -262,7 +264,10 @@ const Register = () => {
                 >
                   <option value="">Select upazila</option>
                   {upazilas
-                    .filter((u) => String(u.district_id) === district)
+                    .filter((u) => {
+                      const d = districts.find((d) => d.name === district);
+                      return d && String(u.district_id) === String(d.id);
+                    })
                     .map((u) => (
                       <option key={u.id} value={u.name}>
                         {u.name}

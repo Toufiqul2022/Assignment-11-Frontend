@@ -25,7 +25,7 @@ const SearchRequest = () => {
     setSearched(true);
     try {
       const res = await axios.get(
-        `${API_URL}/search-donors?bloodGroup=${encodeURIComponent(selBlood)}&district=${encodeURIComponent(selDistrict)}&upazila=${encodeURIComponent(selUpazila)}`,
+        `${API_URL}/search-requests?bloodGroup=${encodeURIComponent(selBlood)}&district=${encodeURIComponent(selDistrict)}&upazila=${encodeURIComponent(selUpazila)}`,
       );
       setResults(res.data);
     } catch {
@@ -278,39 +278,24 @@ const SearchRequest = () => {
                       marginBottom: "1rem",
                     }}
                   >
-                    {r.photoURL ? (
-                      <img
-                        src={r.photoURL}
-                        alt={r.name}
-                        style={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          flexShrink: 0,
-                          border: "2px solid rgba(220,38,38,.2)",
-                        }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: "50%",
-                          background: "rgba(220,38,38,.1)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontFamily: "'Playfair Display',serif",
-                          fontSize: "1.3rem",
-                          fontWeight: 900,
-                          color: "#dc2626",
-                          flexShrink: 0,
-                        }}
-                      >
-                        {r.blood}
-                      </div>
-                    )}
+                    <div
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "50%",
+                        background: "rgba(220,38,38,.1)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: "'Playfair Display',serif",
+                        fontSize: "1.1rem",
+                        fontWeight: 900,
+                        color: "#dc2626",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {r.bloodGroup}
+                    </div>
                     <div>
                       <div
                         style={{
@@ -319,13 +304,43 @@ const SearchRequest = () => {
                           fontSize: ".9rem",
                         }}
                       >
-                        {r.name}
+                        {r.recipientName}
                       </div>
                       <div style={{ fontSize: ".75rem", color: "#94a3b8" }}>
                         {r.upazila}, {r.district}
                       </div>
                     </div>
                   </div>
+                  <div
+                    style={{
+                      fontSize: ".8rem",
+                      color: "#475569",
+                      marginBottom: ".5rem",
+                    }}
+                  >
+                    🏥 {r.hospital}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: ".78rem",
+                      color: "#64748b",
+                      marginBottom: ".75rem",
+                    }}
+                  >
+                    📅 {r.donationDate} at {r.donationTime}
+                  </div>
+                  {r.message && (
+                    <div
+                      style={{
+                        fontSize: ".78rem",
+                        color: "#64748b",
+                        fontStyle: "italic",
+                        marginBottom: ".75rem",
+                      }}
+                    >
+                      "{r.message}"
+                    </div>
+                  )}
                   <div
                     style={{
                       display: "inline-flex",
@@ -339,7 +354,7 @@ const SearchRequest = () => {
                       fontSize: ".85rem",
                     }}
                   >
-                    🩸 {r.blood}
+                    🩸 {r.bloodGroup}
                   </div>
                 </div>
               ))}
